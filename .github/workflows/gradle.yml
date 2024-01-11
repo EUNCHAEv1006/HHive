@@ -43,15 +43,20 @@ jobs:
           sudo docker build -f Dockerfile -t ${{ secrets.DOCKERHUB_USERNAME }}/hhive .
           sudo docker push ${{ secrets.DOCKERHUB_USERNAME }}/hhive
 
-      
-
-
-  deploy:
-    needs: build-docker-image
-    name: Deploy
-    runs-on: ubuntu-latest
-    steps:
-      - name: Docker run
-        run: |
-          sudo docker stop hhive && docker rm hhive && docker rmi ${{ secrets.DOCKERHUB_TAG }}
-          sudo docker run -d -p 80:8080 ${{ secrets.PROD_ENV }} --name hhive ${{ secrets.DOCKERHUB_TAG }}
+      - name: Deploy Front to prod
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.AWS_HOST }}
+          username: ${{ secrets.AWS_USERNAME }}
+          password: ${{ secrets.AWS_PASSWORD }}
+          port: 22
+          script: |
+              if docker ps -a --format ‘{{.ID}}’ | grep -q .; then
+                sudo docker rm -f $(docker ps -qa)
+              else
+                echo “No Docker containers to remove.”
+              fi
+              sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/omo-be
+              sudo docker run --name omo-be -d ${{ secrets.DOCKERHUB_USERNAME }}/omo-be
+              sudo docker run --name redis-server -d -p 6379:6379 redis
+              docker image prune -f
