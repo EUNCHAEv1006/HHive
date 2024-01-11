@@ -59,7 +59,7 @@ jobs:
   deploy:
     needs: build-docker-image
     name: Deploy
-    runs-on: [ self-hosted, label-development ]
+    runs-on: [ ubuntu-latest, label-development ]
     steps:
       - name: Docker run
         run: |
