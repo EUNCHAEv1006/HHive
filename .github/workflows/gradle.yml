@@ -9,7 +9,6 @@ on:
 
 jobs:
   build-docker-image:
-    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
     steps:
@@ -65,4 +64,4 @@ jobs:
       - name: Docker run
         run: |
           sudo docker stop HHive && docker rm HHive && docker rmi ${{ secrets.DOCKERHUB_TAG }}
-          sudo docker run -d -p 80:8080 ${{ secrets.PROD_ENV }} --name talmorello ${{ secrets.DOCKERHUB_TAG }}
+          sudo docker run -d -p 80:8080 ${{ secrets.PROD_ENV }} --name HHive ${{ secrets.DOCKERHUB_TAG }}
