@@ -2,10 +2,10 @@ name: Hhive foooooooork
 
 on:
   pull_request:
-    branches: [ main ]
+    branches: [ dev ]
     types: [closed]
   push:
-    branches: [ main ]
+    branches: [ dev ]
 
 jobs:
   build-docker-image:
