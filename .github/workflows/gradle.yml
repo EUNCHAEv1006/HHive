@@ -47,8 +47,8 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.AWS_HOST }}
-          username: ${{ secrets.AWS_USERNAME }}
-          password: ${{ secrets.AWS_PASSWORD }}
+          username: ubuntu
+          key: ${{ secrets.AWS_SSH_KEY }}
           port: 22
           script: |
               if docker ps -a --format ‘{{.ID}}’ | grep -q .; then
@@ -56,7 +56,7 @@ jobs:
               else
                 echo “No Docker containers to remove.”
               fi
-              sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/omo-be
-              sudo docker run --name omo-be -d ${{ secrets.DOCKERHUB_USERNAME }}/omo-be
+              sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/hhive
+              sudo docker run --name hhive -d ${{ secrets.DOCKERHUB_USERNAME }}/hhive
               sudo docker run --name redis-server -d -p 6379:6379 redis
               docker image prune -f
