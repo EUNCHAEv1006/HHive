@@ -62,7 +62,7 @@ jobs:
           character set server: 'utf8'
           mysql database: ${{ secrets.DATABASE_NAME }}
           mysql user: ${{ secrets.USERNAME }}
-          mysql password: ${{ secrets.PASSWORD }}
+          mysql password:
 
 
   deploy:
